@@ -1,11 +1,35 @@
 public class QuantityMeasurementApp {
+    // Enum for Units
+    enum LengthUnit {
+        FEET(1.0),
+        INCH(1.0 / 12.0);
 
-    // Feet Class
-    static class Feet {
+        private final double factor;
+
+        LengthUnit(double factor) {
+            this.factor = factor;
+        }
+
+        public double getFactor() {
+            return factor;
+        }
+    }
+
+    // Generic Quantity Class
+    static class QuantityLength {
         private final double value;
+        private final LengthUnit unit;
 
-        public Feet(double value) {
+        public QuantityLength(double value, LengthUnit unit) {
+            if (unit == null)
+                throw new IllegalArgumentException("Unit cannot be null");
+
             this.value = value;
+            this.unit = unit;
+        }
+
+        private double toFeet() {
+            return value * unit.getFactor();
         }
 
         @Override
@@ -16,53 +40,21 @@ public class QuantityMeasurementApp {
             if (obj == null || getClass() != obj.getClass())
                 return false;
 
-            Feet other = (Feet) obj;
-            return Double.compare(this.value, other.value) == 0;
+            QuantityLength other = (QuantityLength) obj;
+
+            return Double.compare(this.toFeet(), other.toFeet()) == 0;
         }
     }
 
-    // Inches Class
-    static class Inches {
-        private final double value;
-
-        public Inches(double value) {
-            this.value = value;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-
-            if (obj == null || getClass() != obj.getClass())
-                return false;
-
-            Inches other = (Inches) obj;
-            return Double.compare(this.value, other.value) == 0;
-        }
-    }
-
-    // Static Method for Feet Equality
-    public static boolean compareFeet(double v1, double v2) {
-        Feet f1 = new Feet(v1);
-        Feet f2 = new Feet(v2);
-        return f1.equals(f2);
-    }
-
-    // Static Method for Inches Equality
-    public static boolean compareInches(double v1, double v2) {
-        Inches i1 = new Inches(v1);
-        Inches i2 = new Inches(v2);
-        return i1.equals(i2);
-    }
 
     public static void main(String[] args) {
-        System.out.println("Feet Equality : " +
-                compareFeet(1.0, 1.0));
 
-        System.out.println("Inches Equality : " +
-                compareInches(1.0, 1.0));
+        QuantityLength q1 =
+                new QuantityLength(1.0, LengthUnit.FEET);
+
+        QuantityLength q2 =
+                new QuantityLength(12.0, LengthUnit.INCH);
+
+        System.out.println("Equal : " + q1.equals(q2));
     }
-
-
 }
