@@ -1,5 +1,6 @@
 public class QuantityMeasurementApp {
-    // Inner Class
+
+    // Feet Class
     static class Feet {
         private final double value;
 
@@ -20,11 +21,48 @@ public class QuantityMeasurementApp {
         }
     }
 
-    public static void main(String[] args) {
+    // Inches Class
+    static class Inches {
+        private final double value;
 
-        Feet f1 = new Feet(1.0);
-        Feet f2 = new Feet(1.0);
+        public Inches(double value) {
+            this.value = value;
+        }
 
-        System.out.println("Equal : " + f1.equals(f2));
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+
+            if (obj == null || getClass() != obj.getClass())
+                return false;
+
+            Inches other = (Inches) obj;
+            return Double.compare(this.value, other.value) == 0;
+        }
     }
+
+    // Static Method for Feet Equality
+    public static boolean compareFeet(double v1, double v2) {
+        Feet f1 = new Feet(v1);
+        Feet f2 = new Feet(v2);
+        return f1.equals(f2);
+    }
+
+    // Static Method for Inches Equality
+    public static boolean compareInches(double v1, double v2) {
+        Inches i1 = new Inches(v1);
+        Inches i2 = new Inches(v2);
+        return i1.equals(i2);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Feet Equality : " +
+                compareFeet(1.0, 1.0));
+
+        System.out.println("Inches Equality : " +
+                compareInches(1.0, 1.0));
+    }
+
+
 }
